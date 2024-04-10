@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sekigaeUI3</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #12151b;
+            color: #bbbbbbbb;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', 'Noto Sans JP', sans-serif, monospace;
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        header {
+            margin: 0;
+            padding: 2mm;
+            width: 100%;
+            height: 20mm;
+            background-color: #272e3b;
+            border-radius: 0 0 4mm 4mm;
+
+        }
+
+        h1 {
+            padding: 0;
+            margin: 0;
+        }
+
+        .text-center {
+            display: flex;
+            align-items: center;
+            /* 垂直方向の中央揃え */
+        }
+
+        .header-appname {
+            height: 100%;
+            width: 100mm;
+        }
+
+        .icon {
+            height: 20mm;
+            width: 20mm;
+        }
+
+        .box {
+            display: block !important;
+        }
+
+        .flex {
+            display: flex !important;
+        }
+
+        .stage-select-back {
+            height: 12mm;
+            width: 120mm;
+            margin: 0 auto;
+            margin-top: 5mm;
+            margin-bottom: 5mm;
+            background-color: #272e3b;
+            border-radius: 2mm;
+            display: flex;
+            position: relative;
+        }
+
+        .selecter-effect {
+            width: calc(33.33% - 2mm);
+            height: 10mm;
+            margin: 1mm;
+            border-radius: 2mm;
+            position: absolute;
+            background-color: #323a48;
+            z-index: 0;
+        }
+
+        input[type="button"].chairs {
+            background-color: #00000000;
+            width: 33.333%;
+            height: 12mm;
+            color: #eeeeee;
+            border: none;
+            z-index: 99;
+
+            &:hover {
+                background-color: #ffffff19;
+            }
+
+        }
+        input[type="button"].add-column {
+            background-color: #00ff2a;
+            width: 8mm;
+            height: 12mm;
+            color: #000000;
+            border: none;
+            z-index: 99;
+            border-radius: 1mm;
+            font-weight: bold;
+            margin: 2mm;
+            &:hover {
+                background-color: #ffffff19;
+            }
+
+        }
+        input[type="button"].sub-column {
+            background-color: #ff0000;
+            width: 8mm;
+            height: 12mm;
+            color: #000000;
+            border: none;
+            z-index: 99;
+            font-weight: bold;
+            border-radius: 1mm;
+            margin: 2mm;
+            &:hover {
+                background-color: #ffffff19;
+            }
+
+        }
+
+        input[type="button"].add-row {
+            background-color: #00ff2a;
+            width: 12mm;
+            height: 8mm;
+            color: #000000;
+            border: none;
+            z-index: 99;
+            border-radius: 1mm;
+            font-weight: bold;
+            margin: 2mm;
+
+            &:hover {
+                background-color: #ffffff19;
+            }
+
+        }
+        input[type="button"].sub-row {
+            background-color: #ff0000;
+            width: 12mm;
+            height: 8mm;
+            color: #000000;
+            border: none;
+            z-index: 99;
+            font-weight: bold;
+            border-radius: 1mm;
+            margin: 2mm;
+
+            &:hover {
+                background-color: #ffffff19;
+            }
+
+        }
+        .scroll {
+            overflow-y: scroll;
+            overflow-x: hidden ;
+        }
+
+        .area {
+            width: 100%;
+            height: calc(100vh - 42mm);
+            position: relative;
+            background-color: #272e3b;
+            border-radius: 4mm 4mm 0 0;
+        }
+
+        .default-area {
+            margin: 0 auto;
+            margin-top: 10mm;
+            width: 120mm;
+            height: auto;
+        }
+
+        table {
+            min-width: 80mm;
+            min-height: 80mm;
+            margin: 0 auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        td {
+            background-color: #323a48;
+            border-radius: 1mm;
+            margin: 1mm;
+            min-height: 5mm;
+            min-width: 10mm;
+
+            &:hover {
+                background-color: #ffffff19;
+            }
+        }
+
+        .table-setting-area {
+            display: flex;
+            width: 120mm;
+            height: auto;
+            overflow: auto;
+        }
+
+        .row-set{
+            width: 50mm;
+            margin: 0 auto;
+            padding-left: 5mm;
+            height: 15mm;
+        }
+        .column-set{
+            width: 10mm;
+            height: 100%;
+
+        }
+        
+
+        @media screen and (max-width:120mm) {
+
+            .stage-select-back {
+                width: 90%;
+            }
+
+            .default-area {
+                width: 90%;
+
+            }
+
+            .table-setting-area {
+                width: 100%;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-25%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0%);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0%);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-25%);
+                display: none;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s forwards;
+            visibility: visible;
+            /* 要素を表示 */
+        }
+
+        .fade-out {
+            animation: fadeOut 1s forwards;
+            visibility: hidden;
+            /* 要素を非表示 */
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="text-center header-appname"><img class="icon" src="/viw/chair_wood.png">
+            <h1>席替えアプリ！</h1>
+        </div>
+    </header>
+    <div class="block">
+        <div class="stage-select-back text-center">
+            <div class="selecter-effect"></div>
+            <input type="button" class="chairs" value="stage1">
+            <input type="button" class="chairs" value="stage2">
+            <input type="button" class="chairs" value="stage3">
+        </div>
+        <div id="CT-0" class="area scroll fade-in">
+            <div class="default-area">
+                <p>座席の並び方を設定してね★</p>
+                <div id="tableInfo">行数: 0, 列数: 0</div>
+                <div class="table-setting-area box">
+                    <div class="flex">
+                        <table>
+                            <tr>
+                                <td>0</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>3</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>7</td>
+                            </tr>
+                        </table>
+                        <div class="box column-set">
+                            <input type="button" value="+" class="add-column">
+                            <input type="button" value="-" class="sub-column">
+                        </div>
+                    </div>
+                    <div class="row-set">
+                    <input type="button" value="+" class="add-row">
+                    <input type="button" value="-" class="sub-row">
+                </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="CT-1" class="area scroll fade-out"></div>
+
+        <div id="CT-2" class="area scroll fade-out"></div>
+    </div>
+
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const stageButtons = document.querySelectorAll('.chairs');
+        const addColumnButton = document.querySelector('.add-column');
+        const subColumnButton = document.querySelector('.sub-column');
+        const addRowButton = document.querySelector('.add-row');
+        const subRowButton = document.querySelector('.sub-row');
+        const table = document.querySelector('table');
+
+        function updateTableInfo() {
+        const rowCount = table.rows.length;
+        const columnCount = table.rows[0] ? table.rows[0].cells.length : 0;
+        tableInfo.textContent = `よこれつ: ${rowCount}, たてれつ: ${columnCount}`;
+        }
+    
+        // ステージ選択ボタンのイベントリスナー
+        stageButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                alert(`${event.target.value} が選択されました。`);
+                
+            });
+        });
+    
+        // 列の追加
+        addColumnButton.addEventListener('click', () => {
+            const rows = table.querySelectorAll('tr');
+            rows.forEach(row => {
+                const newCell = row.insertCell();
+                newCell.innerText = '0'; 
+                updateTableInfo();
+            });
+        });
+    
+        // 列の削除
+        subColumnButton.addEventListener('click', () => {
+            const rows = table.querySelectorAll('tr');
+            rows.forEach(row => {
+                if (row.cells.length > 1) { // 最低1列は残す
+                    row.deleteCell(-1); 
+                    updateTableInfo();
+                }
+            });
+        });
+    
+        // 行の追加
+        addRowButton.addEventListener('click', () => {
+            const newRow = table.insertRow();
+            for (let i = 0; i < table.rows[0].cells.length; i++) {
+                const newCell = newRow.insertCell();
+                newCell.innerText = '0'; updateTableInfo();
+
+            }
+        });
+    
+        // 行の削除
+        subRowButton.addEventListener('click', () => {
+            if (table.rows.length > 1) { // 最低1行は残す
+                table.deleteRow(-1); 
+                updateTableInfo();
+            }
+        });
+        updateTableInfo();
+    });
+    </script>
+
+</html>
