@@ -14,7 +14,7 @@
         html {
             margin: 0;
             padding: 0;
-            height: 100%;
+            height: 100svh;
             width: 100%;
             background-color: #12151b;
             color: #bbbbbbbb;
@@ -101,7 +101,7 @@
             z-index: 99;
 
             &:hover {
-                background-color: #ffffff19;
+                background-color: #ffffff05;
             }
 
         }
@@ -202,7 +202,7 @@
             max-height: 100%;
         }
 
-        td {
+        td.chair {
             background-color: #ffc635;
             border-radius: 1mm;
             margin: 1mm;
@@ -216,13 +216,13 @@
         }
 
         .active {
-            background-color: #ffc635;
+            background-color: #ffc635 !important;
             /* 有効状態の背景色 */
             color: #3c3d42;
         }
 
         .inactive {
-            background-color: #3c3d42;
+            background-color: #3c3d42 !important;
             /* 無効状態の背景色 */
             color: #3c3d42;
         }
@@ -251,6 +251,17 @@
             width: 10mm;
             height: 100%;
 
+        }
+
+        .name-set-table>tr>td:first-child {
+            background-color: #ffc635;
+            border-radius: 1mm;
+            margin: 1mm;
+            height: 10mm;
+            width: 10mm;
+            text-align: center;
+            color: #3c3d42;
+            cursor: pointer;
         }
 
 
@@ -331,20 +342,20 @@
                         <div class="table">
                             <table>
                                 <tr>
-                                    <td class="active">いす</td>
-                                    <td class="active">いす</td>
+                                    <td class="active chair">いす</td>
+                                    <td class="active chair">いす</td>
                                 </tr>
                                 <tr>
-                                    <td class="active">いす</td>
-                                    <td class="active">いす</td>
+                                    <td class="active chair">いす</td>
+                                    <td class="active chair">いす</td>
                                 </tr>
                                 <tr>
-                                    <td class="active">いす</td>
-                                    <td class="active">いす</td>
+                                    <td class="active chair">いす</td>
+                                    <td class="active chair">いす</td>
                                 </tr>
                                 <tr>
-                                    <td class="active">いす</td>
-                                    <td class="active">いす</td>
+                                    <td class="active chair">いす</td>
+                                    <td class="active chair">いす</td>
                                 </tr>
                             </table>
                         </div>
@@ -363,7 +374,21 @@
 
         </div>
 
-        <div id="CT-1" class="area scroll fade-out">それぞれの人の希望とか番号に割り当てられる名前を入力する場所</div>
+        <div id="CT-1" class="area scroll fade-out">
+            <table>
+                <tbody id="name-set-table" class="name-set-table">
+                    <tr>
+                        <th>Number</th>
+                        <th>Name</th>
+                        <th>etc</th>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+            それぞれの人の希望とか番号に割り当てられる名前を入力する場所
+        </div>
 
         <div id="CT-2" class="area scroll fade-out">結果発表する場所</div>
     </div>
@@ -381,12 +406,44 @@
         const CT0 = document.getElementById('CT-0');
         const CT1 = document.getElementById('CT-1');
         const CT2 = document.getElementById('CT-2');
+        const nameSetTable = document.getElementById('name-set-table');
         const selecterEffect = document.querySelector('.selecter-effect');
+
+        function addNameSetTableRow(cellnumber) {
+            const newRow = nameSetTable.insertRow();
+
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+
+            cell1.textContent = cellnumber
+
+            const input = document.createElement("input");
+            input.type = "text";
+            cell2.appendChild(input);
+
+            const button = document.createElement("button");
+            button.textContent = "詳細設定";
+            button.onclick = countActiveCells(); // ボタンクリック時に実行する関数を設定
+            cell3.appendChild(button);
+        }
+
+        function showNameSetTable(range) {
+            while (nameSetTable.rows.length > 1) { // 最初の行以外が存在する間はループ
+                nameSetTable.deleteRow(1); // 2行目（indexは0から始まるので1）を削除
+            }
+
+            for (let i = 1; i <= range; i++) {
+                addNameSetTableRow(i);
+            }
+        }
+
 
         function updateTableInfo() {
             const rowCount = table.rows.length;
             const columnCount = table.rows[0] ? table.rows[0].cells.length : 0;
             const activeCounts = countActiveCells();
+
             tableInfo.textContent = `よこれつ: ${rowCount}, たてれつ: ${columnCount}, 座席数: ${activeCounts}`;
         }
 
@@ -404,53 +461,68 @@
         });
 
         function delay(time) {
-        // Promiseを返し、指定された時間後に解決する
-        return new Promise(resolve => setTimeout(resolve, time));
-    }
+            // Promiseを返し、指定された時間後に解決する
+            return new Promise(resolve => setTimeout(resolve, time));
+        }
 
         // ステージ選択ボタンのイベントリスナー
         stageButtons.forEach(button => {
             addEventListener('click', async (event) => {
-              
-                if (event.target.value == "step2") {
-                    CT0.classList.remove('fade-in');
-                CT0.classList.add('fade-out');
-                CT1.classList.remove('fade-in');
-                CT1.classList.add('fade-out');
-                CT2.classList.remove('fade-in');
-                CT2.classList.add('fade-out');
 
-                selecterEffect.style.left = "33.333%";
-                await delay(500);
-                CT1.classList.remove('fade-out');
-                CT1.classList.add('fade-in');
-                
-                } else if (event.target.value == "step1"){
-                CT0.classList.remove('fade-in');
-                CT0.classList.add('fade-out');
-                CT1.classList.remove('fade-in');
-                CT1.classList.add('fade-out');
-                CT2.classList.remove('fade-in');
-                CT2.classList.add('fade-out');
-                
-                selecterEffect.style.left = "0%";
-                await delay(500);
-                CT0.classList.remove('fade-out');
-                CT0.classList.add('fade-in');
-                
+                if (event.target.value == "step2") {
+                    
+                    const countChair = countActiveCells();
+
+                    if (countChair > 2000) {
+                        alert("座席数2000以上は席替えできないよ、、ごめんね");
+                        return;
+    
+                    } else if (countChair == 0) {
+                        alert("席替えの意味ある？");
+                        return;
+                    } 
+
+                    CT0.classList.remove('fade-in');
+                    CT0.classList.add('fade-out');
+                    CT1.classList.remove('fade-in');
+                    CT1.classList.add('fade-out');
+                    CT2.classList.remove('fade-in');
+                    CT2.classList.add('fade-out');
+
+                        showNameSetTable(countChair);
+
+                        selecterEffect.style.left = "33.333%";
+                        await delay(500);
+                        CT1.classList.remove('fade-out');
+                        CT1.classList.add('fade-in');
+                    
+
+                } else if (event.target.value == "step1") {
+                    CT0.classList.remove('fade-in');
+                    CT0.classList.add('fade-out');
+                    CT1.classList.remove('fade-in');
+                    CT1.classList.add('fade-out');
+                    CT2.classList.remove('fade-in');
+                    CT2.classList.add('fade-out');
+
+                    selecterEffect.style.left = "0%";
+                    await delay(500);
+                    CT0.classList.remove('fade-out');
+                    CT0.classList.add('fade-in');
+
                 } else if (event.target.value == "step3") {
                     CT0.classList.remove('fade-in');
-                CT0.classList.add('fade-out');
-                CT1.classList.remove('fade-in');
-                CT1.classList.add('fade-out');
-                CT2.classList.remove('fade-in');
-                CT2.classList.add('fade-out');
+                    CT0.classList.add('fade-out');
+                    CT1.classList.remove('fade-in');
+                    CT1.classList.add('fade-out');
+                    CT2.classList.remove('fade-in');
+                    CT2.classList.add('fade-out');
 
-                selecterEffect.style.left = "66.666%";
-                await delay(500);
-                CT2.classList.remove('fade-out');
-                CT2.classList.add('fade-in');
-                
+                    selecterEffect.style.left = "66.666%";
+                    await delay(500);
+                    CT2.classList.remove('fade-out');
+                    CT2.classList.add('fade-in');
+
                 }
 
             });
@@ -463,6 +535,7 @@
                 const newCell = row.insertCell();
                 newCell.innerText = 'いす';
                 newCell.classList.add('active');
+                newCell.classList.add('chair');
                 updateTableInfo();
             });
         });
@@ -485,6 +558,7 @@
                 const newCell = newRow.insertCell();
                 newCell.innerText = 'いす';
                 newCell.classList.add('active');
+                newCell.classList.add('chair');
                 updateTableInfo();
 
             }
