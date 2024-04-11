@@ -22,6 +22,7 @@ class SESSION():
     def tick_task(self):
         logging.info(f"session_tick...")
         logging.debug(self.session_list)
+        # 未完成なのだ（セッションがたまり続けるのをふせぐための場所。
 
 
     def create_session_id(self):#IDの生成
