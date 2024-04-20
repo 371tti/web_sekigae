@@ -174,8 +174,48 @@
 
         }
 
+        input[type="button"].chair-set-etc {
+            cursor: pointer;
+            background-color: #9b9b9b;
+            width: 20mm;
+            height: 10mm;
+            color: #000000;
+            border: none;
+            border-radius: 1mm;
+
+            &:hover {
+                background-color: #ffffff19;
+            }
+
+        }
+
+        input[type="button"].next-button {
+            cursor: pointer;
+            background-color: #9b9b9b;
+            width: 15mm;
+            height: 10mm;
+            color: #000000;
+            border: none;
+            border-radius: 1mm;
+
+            &:hover {
+                background-color: #ffffff19;
+            }
+
+        }
+
+        input[type="text"].name-input {
+            height: 10mm;
+            width: 50mm;
+            border: none;
+            border-radius: 1mm;
+            background-color: #3c3d42;
+            color: #eeeeee;
+
+        }
+
         .scroll {
-            overflow-y: scroll;
+            overflow-y: auto;
             overflow-x: hidden;
         }
 
@@ -263,6 +303,8 @@
             color: #3c3d42;
             cursor: pointer;
         }
+
+        
 
 
         @media screen and (max-width:120mm) {
@@ -369,8 +411,11 @@
                         <input type="button" value="-" class="sub-row">
                     </div>
                 </div>
+                <input type="button" value="Next" id="CT0-next-button" class="next-button">
 
             </div>
+
+            
 
         </div>
 
@@ -379,8 +424,8 @@
                 <tbody id="name-set-table" class="name-set-table">
                     <tr>
                         <th>Number</th>
-                        <th>Name</th>
-                        <th>etc</th>
+                        <th>Name(任意設定)</th>
+                        <th>etc...</th>
                     </tr>
 
                 </tbody>
@@ -388,6 +433,7 @@
             </table>
 
             それぞれの人の希望とか番号に割り当てられる名前を入力する場所
+
         </div>
 
         <div id="CT-2" class="area scroll fade-out">結果発表する場所</div>
@@ -406,6 +452,7 @@
         const CT0 = document.getElementById('CT-0');
         const CT1 = document.getElementById('CT-1');
         const CT2 = document.getElementById('CT-2');
+        const CT0_next = document.getElementById('CT0-next-button');
         const nameSetTable = document.getElementById('name-set-table');
         const selecterEffect = document.querySelector('.selecter-effect');
 
@@ -419,11 +466,15 @@
             cell1.textContent = cellnumber
 
             const input = document.createElement("input");
+            input.classList.add("name-input");
             input.type = "text";
+            input.placeholder = "番号のみor名前を入力";
             cell2.appendChild(input);
 
-            const button = document.createElement("button");
-            button.textContent = "詳細設定";
+            const button = document.createElement("input");
+            button.type = "button";
+            button.value = "席設定";
+            button.classList.add("chair-set-etc");
             button.onclick = countActiveCells(); // ボタンクリック時に実行する関数を設定
             cell3.appendChild(button);
         }
@@ -465,13 +516,8 @@
             return new Promise(resolve => setTimeout(resolve, time));
         }
 
-        // ステージ選択ボタンのイベントリスナー
-        stageButtons.forEach(button => {
-            addEventListener('click', async (event) => {
-
-                if (event.target.value == "step2") {
-                    
-                    const countChair = countActiveCells();
+        async function step2_change() {
+            const countChair = countActiveCells();
 
                     if (countChair > 2000) {
                         alert("座席数2000以上は席替えできないよ、、ごめんね");
@@ -495,8 +541,20 @@
                         await delay(500);
                         CT1.classList.remove('fade-out');
                         CT1.classList.add('fade-in');
+                        exportTableToJson();
                     
 
+        }
+
+
+
+        // ステージ選択ボタンのイベントリスナー
+        stageButtons.forEach(button => {
+            addEventListener('click', async (event) => {
+
+                if (event.target.value == "step2") {
+                    await step2_change();       
+                    // oaroaraororaoroaoroaroaor
                 } else if (event.target.value == "step1") {
                     CT0.classList.remove('fade-in');
                     CT0.classList.add('fade-out');
@@ -529,6 +587,10 @@
         });
 
         // 列の追加
+        CT0_next.addEventListener('click',async () => {
+            await step2_change();
+        })
+
         addColumnButton.addEventListener('click', () => {
             const rows = table.querySelectorAll('tr');
             rows.forEach(row => {
