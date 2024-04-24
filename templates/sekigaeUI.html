@@ -191,15 +191,19 @@
 
         input[type="button"].next-button {
             cursor: pointer;
-            background-color: #9b9b9b;
-            width: 15mm;
-            height: 10mm;
+            background-color: #ffc635;
+            width: 100%;
+            height: 15mm;
+            font-weight: bold;
             color: #000000;
             border: none;
             border-radius: 1mm;
+            clip-path: polygon(100% 0%, 100% 50%, 100% 100%, 0% 100%, 0% 50%, 0% 0%);
+            transition: all 0.5s;
 
             &:hover {
                 background-color: #ffffff19;
+                clip-path: polygon(95% 0%, 100% 50%, 95% 100%, 0% 100%, 5% 50%, 0% 0%);
             }
 
         }
@@ -240,6 +244,7 @@
             margin: 0 auto;
             max-width: 100%;
             max-height: 100%;
+            margin-bottom: 10mm;
         }
 
         td.chair {
@@ -277,7 +282,7 @@
         .table {
             overflow: scroll;
             width: 100%;
-            height: 100%
+            height: 100%;
         }
 
         .row-set {
@@ -420,6 +425,9 @@
         </div>
 
         <div id="CT-1" class="area scroll fade-out">
+            <div class="default-area">
+
+            <p>番号に対になる名前やどこに座りたいかの座席設定をしてね。</p>
             <table>
                 <tbody id="name-set-table" class="name-set-table">
                     <tr>
@@ -432,11 +440,15 @@
 
             </table>
 
-            それぞれの人の希望とか番号に割り当てられる名前を入力する場所
-
+            <input type="button" value="Next" id="CT2-next-button" class="next-button"> 
+        </div>
         </div>
 
         <div id="CT-2" class="area scroll fade-out">結果発表する場所</div>
+    </div>
+
+    <div class="set-chair-pop-up" id="pop-up">
+        
     </div>
 
 </body>
@@ -453,6 +465,7 @@
         const CT1 = document.getElementById('CT-1');
         const CT2 = document.getElementById('CT-2');
         const CT0_next = document.getElementById('CT0-next-button');
+        const CT1_next = document.getElementById('CT1-next-button');
         const nameSetTable = document.getElementById('name-set-table');
         const selecterEffect = document.querySelector('.selecter-effect');
 
